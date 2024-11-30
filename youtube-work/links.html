@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Links</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function loadLinks() {
+            const linksTable = document.getElementById("linksTable");
+            const savedLinks = JSON.parse(localStorage.getItem("links")) || [];
+
+            linksTable.innerHTML = savedLinks
+                .map((link, index) => `
+                    <tr>
+                        <td>${link}</td>
+                        <td><button class="btn btn-small" onclick="editLink(${index})">Edit</button></td>
+                        <td><button class="btn btn-danger btn-small" onclick="removeLink(${index})">Remove</button></td>
+                    </tr>
+                `).join("");
+        }
+
+        function editLink(index) {
+            const newLink = prompt("Enter the new link:");
+            if (newLink) {
+                let savedLinks = JSON.parse(localStorage.getItem("links")) || [];
+                savedLinks[index] = newLink;
+                localStorage.setItem("links", JSON.stringify(savedLinks));
+                loadLinks();
+            }
+        }
+
+        function removeLink(index) {
+            let savedLinks = JSON.parse(localStorage.getItem("links")) || [];
+            savedLinks.splice(index, 1);
+            localStorage.setItem("links", JSON.stringify(savedLinks));
+            loadLinks();
+        }
+
+        window.onload = loadLinks;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html">Back</a>
+        <h1>Manage Links</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Links</th>
+                    <th>Action</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="linksTable"></tbody>
+        </table>
+    </div>
+</body>
+</html>
